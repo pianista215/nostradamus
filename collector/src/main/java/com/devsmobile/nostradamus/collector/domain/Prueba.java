@@ -14,7 +14,7 @@ public class Prueba {
 
 	@Override
 	public String toString() {
-		return "Prueba [prueba=" + prueba + "]";
+		return prueba;
 	}
 	
 }
