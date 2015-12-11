@@ -1,5 +1,7 @@
 package com.devsmobile.nostradamus.collector.domain;
 
+import org.springframework.util.StringUtils;
+
 /**
  * Configuration for database access
  * @author Pianista
@@ -28,6 +30,12 @@ public class Configuration {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public boolean isValid(){
+		return !StringUtils.isEmpty(jdbcUrl)
+				&& !StringUtils.isEmpty(user)
+				&& !StringUtils.isEmpty(password);
 	}
 	
 }

@@ -1,15 +1,20 @@
 package com.devsmobile.nostradamus.collector.rest;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsmobile.nostradamus.collector.domain.Configuration;
 import com.devsmobile.nostradamus.collector.domain.Schema;
+import com.devsmobile.nostradamus.collector.rest.vo.Response;
+import com.devsmobile.nostradamus.collector.rest.vo.ResponseStatus;
 import com.devsmobile.nostradamus.collector.service.InstallService;
 import com.devsmobile.nostradamus.collector.utils.PropertiesUtils;
 
@@ -28,37 +33,49 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	@Override
-	public String status() {
+	public Response status() {
 		LOG.debug("Status invoked");
+		Response res = new Response();
 		if(!propUtils.isValidProperties()){
-			return "Properties file not configured. Please fill collector.properties and restart the server.";
+			res.setStatus(ResponseStatus.NOOK);
+			res.setMsg("Properties file not configured. Please fill collector.properties and restart the server.");
 		} else{
-			return "Collector version :{}\n DB status:{}\n {} objects inserted";
+			res.setStatus(ResponseStatus.OK);
+			res.setMsg("Collector version :{} DB status:{} {} objects inserted");
 		}
+		return res;
 	}
 
-	@RequestMapping(value="/configure", method = RequestMethod.GET)
+	@RequestMapping(value="/configure", method = RequestMethod.POST)
 	@Override
-	public String configure(Configuration config) {
+	public Response configure(@RequestBody Configuration config) {
 		LOG.debug("Trying to set up new config: {}", config);
+		Response res = new Response();
 		if(propUtils.isValidProperties()){
-			return "Sorry but collector.properties is already configured.";
+			res.setStatus(ResponseStatus.NOOK);
+			res.setMsg("Sorry but collector.properties is already configured.");
+		} else if(config==null || !config.isValid()){
+			res.setStatus(ResponseStatus.NOOK);
+			res.setMsg("Invalid configuration provided.");
 		} else{
-			//Mock
-			Configuration c = new Configuration();
-			c.setJdbcUrl("MOCK_JDBC");
-			c.setUser("MOCK_USER");
-			c.setPassword("MOCK_PASSWORD");
-			propUtils.createPropertiesWithConfig(c);
-			return "DB successfully configured:{}";	
+			try{
+				propUtils.createPropertiesWithConfig(config);
+				res.setStatus(ResponseStatus.OK);
+				res.setMsg("DB successfully configured.");
+			} catch (IOException e){
+				res.setStatus(ResponseStatus.NOOK);
+				res.setMsg("Impossible to configure database.");
+			}
+			
 		}
+		return res;
 	}
 
 	@RequestMapping(value="/createSchema", method = RequestMethod.POST)
 	@Override
-	public String createSchema(Schema schema) {
+	public Response createSchema(@RequestBody Schema schema) {
 		LOG.debug("Trying to create schema: {}", schema);
-		return "{}";
+		return new Response();
 	}
 
 }

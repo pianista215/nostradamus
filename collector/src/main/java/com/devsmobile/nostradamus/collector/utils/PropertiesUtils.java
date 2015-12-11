@@ -71,38 +71,39 @@ public class PropertiesUtils {
 			&& !StringUtils.isEmpty(prop.getProperty(JDBC_KEY));
 	}
 	
-	public void createPropertiesWithConfig(Configuration config){
-		//TODO: Excepction
-		createPropertiesFile(config.getJdbcUrl(), config.getUser(), config.getPassword(), new Date().toString());
+	/**
+	 * Create/Override the collector.properties with the configuration provided
+	 * @param config
+	 * @throws IOException
+	 */
+	public void createPropertiesWithConfig(Configuration config) throws IOException{
+		try {
+			createPropertiesFile(config.getJdbcUrl(), config.getUser(), config.getPassword(), new Date().toString());
+		} catch (IOException e){
+			LOG.error("Impossible to write config",e);
+			throw e;
+		}
 	}
 	
 	/**
 	 * Create the file in order to help in the manual installation to the user
 	 */
 	private void createEmptyProperties(){
-		createPropertiesFile("","","","Please fill this file with the property information of your environment");
+		try {
+			createPropertiesFile("","","","Please fill this file with the property information of your environment");
+		} catch (IOException e){
+			LOG.error("Impossible to create empty config",e);
+		}
 	}
 	
-	private void createPropertiesFile(String jdbc, String user, String password, String comment){
+	private void createPropertiesFile(String jdbc, String user, String password, String comment) throws IOException{
 		FileOutputStream output = null;
-		try {
-			output = new FileOutputStream(COLLECTOR_PROPERTIES);
-			prop.put(JDBC_KEY, jdbc);
-			prop.put(USER_KEY, user);
-			prop.put(PASSWORD_KEY, password);
-			prop.store(output,comment);
-			output.close();
-		} catch (IOException e){
-			LOG.error("Impossible to create empty "+COLLECTOR_PROPERTIES,e);
-		} finally {
-			if (output != null) {
-				try {
-					output.close();
-				} catch (IOException e) {
-					LOG.error("Error closing file "+ COLLECTOR_PROPERTIES,e);
-				}
-			}
-		}
+		output = new FileOutputStream(COLLECTOR_PROPERTIES);
+		prop.put(JDBC_KEY, jdbc);
+		prop.put(USER_KEY, user);
+		prop.put(PASSWORD_KEY, password);
+		prop.store(output,comment);
+		output.close();	
 	}
 	
 	
