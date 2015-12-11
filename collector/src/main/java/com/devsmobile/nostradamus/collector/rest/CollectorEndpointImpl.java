@@ -1,15 +1,15 @@
 package com.devsmobile.nostradamus.collector.rest;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devsmobile.nostradamus.collector.domain.Prueba;
+import com.devsmobile.nostradamus.collector.domain.Configuration;
+import com.devsmobile.nostradamus.collector.domain.Schema;
 import com.devsmobile.nostradamus.collector.service.InstallService;
 import com.devsmobile.nostradamus.collector.utils.PropertiesUtils;
 
@@ -25,20 +25,40 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 	@Autowired
 	private PropertiesUtils propUtils;
 	
-	@RequestMapping("/")
-    public String index() {
-		LOG.debug("Call to index");
-		String str = "";
-		List<Prueba> result = installService.test();
-		if(result!=null && !result.isEmpty()){
-			for(Prueba p: result){
-				str += p.toString();
-			}
+
+	@RequestMapping(value="/", method = RequestMethod.GET)
+	@Override
+	public String status() {
+		LOG.debug("Status invoked");
+		if(!propUtils.isValidProperties()){
+			return "Properties file not configured. Please fill collector.properties and restart the server.";
 		} else{
-			str = "empty";
+			return "Collector version :{}\n DB status:{}\n {} objects inserted";
 		}
-		LOG.debug("Index result:{}",str);
-        return str;
-    }
+	}
+
+	@RequestMapping(value="/configure", method = RequestMethod.GET)
+	@Override
+	public String configure(Configuration config) {
+		LOG.debug("Trying to set up new config: {}", config);
+		if(propUtils.isValidProperties()){
+			return "Sorry but collector.properties is already configured.";
+		} else{
+			//Mock
+			Configuration c = new Configuration();
+			c.setJdbcUrl("MOCK_JDBC");
+			c.setUser("MOCK_USER");
+			c.setPassword("MOCK_PASSWORD");
+			propUtils.createPropertiesWithConfig(c);
+			return "DB successfully configured:{}";	
+		}
+	}
+
+	@RequestMapping(value="/createSchema", method = RequestMethod.POST)
+	@Override
+	public String createSchema(Schema schema) {
+		LOG.debug("Trying to create schema: {}", schema);
+		return "{}";
+	}
 
 }
