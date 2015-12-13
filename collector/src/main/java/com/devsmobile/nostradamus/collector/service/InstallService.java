@@ -1,10 +1,20 @@
 package com.devsmobile.nostradamus.collector.service;
 
-import java.util.List;
+import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 
-import com.devsmobile.nostradamus.collector.domain.Prueba;
 
 public interface InstallService {
 
-	List<Prueba> test();
+	/**
+	 * Test the database with the configuration provided
+	 * @throws CollectorPersistenceException
+	 */
+	public void testDB() throws CollectorPersistenceException;
+	
+	/**
+	 * Install the schemas needed to run the collector
+	 * @throws CollectorPersistenceException
+	 */
+	public void installCollectorSchemas() throws CollectorPersistenceException;
+	
 }

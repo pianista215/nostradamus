@@ -31,6 +31,11 @@ public class CollectorApplication {
     	//TODO:
     }
     
+    /**
+     * Gson de/serializer as default
+     * @author Pianista
+     *
+     */
     @Configuration
     @ConditionalOnClass(Gson.class)
     @ConditionalOnMissingClass(name = "com.fasterxml.jackson.core.JsonGenerator")

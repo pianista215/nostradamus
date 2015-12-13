@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsmobile.nostradamus.collector.domain.Configuration;
-import com.devsmobile.nostradamus.collector.domain.Schema;
+import com.devsmobile.nostradamus.collector.domain.Collection;
+import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 import com.devsmobile.nostradamus.collector.rest.vo.Response;
 import com.devsmobile.nostradamus.collector.rest.vo.ResponseStatus;
 import com.devsmobile.nostradamus.collector.service.InstallService;
@@ -31,7 +32,7 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 	private PropertiesUtils propUtils;
 	
 
-	@RequestMapping(value="/", method = RequestMethod.GET)
+	@RequestMapping(value="/status", method = RequestMethod.GET)
 	@Override
 	public Response status() {
 		LOG.debug("Status invoked");
@@ -60,21 +61,27 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 		} else{
 			try{
 				propUtils.createPropertiesWithConfig(config);
+				//TODO: Pending on How to change dinamically connections on Spring+Mybatis
+				installService.testDB();
 				res.setStatus(ResponseStatus.OK);
-				res.setMsg("DB successfully configured.");
+				res.setMsg("DB successfully configured, please restart the server in order to see the changes.");
 			} catch (IOException e){
 				res.setStatus(ResponseStatus.NOOK);
-				res.setMsg("Impossible to configure database.");
+				res.setMsg("Impossible to configure database. Check permissions on the file system.");
+			} catch(CollectorPersistenceException e){
+				res.setStatus(ResponseStatus.NOOK);
+				//TODO: Pending on How to change dinamically connections on Spring+Mybatis
+				res.setMsg("Cannot access the database with the parameters you passed. Please correct them and try again.");
 			}
 			
 		}
 		return res;
 	}
 
-	@RequestMapping(value="/createSchema", method = RequestMethod.POST)
+	@RequestMapping(value="/createCollection", method = RequestMethod.POST)
 	@Override
-	public Response createSchema(@RequestBody Schema schema) {
-		LOG.debug("Trying to create schema: {}", schema);
+	public Response createCollection(@RequestBody Collection collection) {
+		LOG.debug("Trying to create collection: {}", collection);
 		return new Response();
 	}
 

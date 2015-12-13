@@ -1,7 +1,7 @@
 package com.devsmobile.nostradamus.collector.rest;
 
 import com.devsmobile.nostradamus.collector.domain.Configuration;
-import com.devsmobile.nostradamus.collector.domain.Schema;
+import com.devsmobile.nostradamus.collector.domain.Collection;
 import com.devsmobile.nostradamus.collector.rest.vo.Response;
 
 public interface CollectorEndpoint {
@@ -20,9 +20,9 @@ public interface CollectorEndpoint {
 	public Response configure(Configuration config);
 	
 	/**
-	 * Create a schema 
-	 * @param schema
+	 * Create a new collection 
+	 * @param collection
 	 * @return
 	 */
-	public Response createSchema(Schema schema);
+	public Response createCollection(Collection collection);
 }

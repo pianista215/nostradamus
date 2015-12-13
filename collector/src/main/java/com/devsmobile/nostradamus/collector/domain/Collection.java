@@ -1,5 +1,5 @@
 package com.devsmobile.nostradamus.collector.domain;
 
-public class Schema {
+public class Collection {
 
 }
