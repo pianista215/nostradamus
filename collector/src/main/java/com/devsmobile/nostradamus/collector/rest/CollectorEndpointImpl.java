@@ -1,7 +1,5 @@
 package com.devsmobile.nostradamus.collector.rest;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devsmobile.nostradamus.collector.domain.Configuration;
 import com.devsmobile.nostradamus.collector.domain.Collection;
-import com.devsmobile.nostradamus.collector.error.AlreadyInstalledSchemaException;
+import com.devsmobile.nostradamus.collector.error.CollectorException;
 import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 import com.devsmobile.nostradamus.collector.rest.vo.Response;
 import com.devsmobile.nostradamus.collector.rest.vo.ResponseStatus;
@@ -27,10 +24,10 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 	private static final Logger LOG = LoggerFactory.getLogger(CollectorEndpointImpl.class);
 	
 	@Autowired
-	private InstallService installService;
+	private PropertiesUtils propUtils;
 	
 	@Autowired
-	private PropertiesUtils propUtils;
+	private InstallService installService;
 	
 
 	@RequestMapping(value="/status", method = RequestMethod.GET)
@@ -42,60 +39,15 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 			res.setStatus(ResponseStatus.NOOK);
 			res.setMsg("Properties file not configured. Please fill collector.properties and restart the server.");
 		} else{
-			res.setStatus(ResponseStatus.OK);
-			res.setMsg("Collector version :{} DB status:{} {} objects inserted");
-		}
-		return res;
-	}
-
-	@RequestMapping(value="/configure", method = RequestMethod.POST)
-	@Override
-	public Response configure(@RequestBody Configuration config) {
-		LOG.debug("Trying to set up new config: {}", config);
-		Response res = new Response();
-		if(propUtils.isValidProperties()){
-			res.setStatus(ResponseStatus.NOOK);
-			res.setMsg("Sorry but collector.properties is already configured.");
-		} else if(config==null || !config.isValid()){
-			res.setStatus(ResponseStatus.NOOK);
-			res.setMsg("Invalid configuration provided.");
-		} else{
 			try{
-				propUtils.createPropertiesWithConfig(config);
-				//TODO: Pending on How to change dinamically connections on Spring+Mybatis
-				installService.testDB();
+				installService.testDBConnection();
 				res.setStatus(ResponseStatus.OK);
-				res.setMsg("DB successfully configured, please restart the server in order to see the changes.");
-			} catch (IOException e){
-				res.setStatus(ResponseStatus.NOOK);
-				res.setMsg("Impossible to configure database. Check permissions on the file system.");
+				res.setMsg("Collector version :{} DB status:{} {} objects inserted");
 			} catch(CollectorPersistenceException e){
 				res.setStatus(ResponseStatus.NOOK);
-				//TODO: Pending on How to change dinamically connections on Spring+Mybatis
-				res.setMsg("Cannot access the database with the parameters you passed. Please correct them and try again.");
+				res.setMsg("Impossible to connect to the database");
 			}
-			
 		}
-		return res;
-	}
-	
-	@RequestMapping(value="/installSchemas", method = RequestMethod.POST)
-	@Override
-	public Response installSchemas() {
-		LOG.debug("Trying to install the database schemas");
-		Response res = new Response();
-		try{
-			installService.installCollectorSchemas();
-			res.setStatus(ResponseStatus.OK);
-			res.setMsg("Schemas installed correctly");
-		} catch (AlreadyInstalledSchemaException e){
-			res.setStatus(ResponseStatus.NOOK);
-			res.setMsg(e.getMessage());
-		} catch(CollectorPersistenceException e){
-			res.setStatus(ResponseStatus.NOOK);
-			res.setMsg(e.getMessage());
-		}
-			
 		return res;
 	}
 

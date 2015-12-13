@@ -36,6 +36,11 @@ public class InstallServiceImpl implements InstallService{
 		testDAO.testInsert(tableId);
 		testDAO.testDrop(tableId);
 	}
+	
+	@Override
+	public void testDBConnection() throws CollectorPersistenceException {
+		testDAO.testConnection();
+	}
 
 	//TODO: Check how to work@Transactional(readOnly=false, rollbackFor = Exception.class )
 	@Override

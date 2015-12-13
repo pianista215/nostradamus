@@ -13,6 +13,12 @@ public interface InstallService {
 	public void testDB() throws CollectorPersistenceException;
 	
 	/**
+	 * Test the connection to the database with the current configuration
+	 * @throws CollectorPersistenceException
+	 */
+	public void testDBConnection() throws CollectorPersistenceException;
+	
+	/**
 	 * Install the schemas needed to run the collector
 	 * @throws CollectorPersistenceException
 	 */
