@@ -6,6 +6,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.devsmobile.nostradamus.collector.domain.ParameterType;
 import com.devsmobile.nostradamus.collector.error.AlreadyInstalledSchemaException;
 import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 import com.devsmobile.nostradamus.collector.persistence.InstallationDAO;
@@ -56,8 +57,14 @@ public class InstallServiceImpl implements InstallService{
 		}
 		
 		installDAO.installSchemaEnvironmentInformation();
+		installDAO.setVersion(Constants.VERSION);
+		
 		installDAO.installSchemaCollection();
 		installDAO.installSchemaParameterType();
+		
+		for(ParameterType type: ParameterType.values()){
+			installDAO.insertParameterType(type);
+		}
 		installDAO.installSchemaTrainingParameters();
 		
 	}

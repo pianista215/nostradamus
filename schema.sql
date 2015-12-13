@@ -1,6 +1,6 @@
 -- Collector will autoinstall the following schema. Just to take if you want to install manually
 
-CREATE TABLE ENVIROMENT_INFORMATION(
+CREATE TABLE ENVIRONMENT_INFORMATION(
 	version VARCHAR(10)
 );
 

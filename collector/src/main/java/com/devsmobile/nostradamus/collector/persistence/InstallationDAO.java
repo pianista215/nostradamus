@@ -1,5 +1,6 @@
 package com.devsmobile.nostradamus.collector.persistence;
 
+import com.devsmobile.nostradamus.collector.domain.ParameterType;
 import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 
 public interface InstallationDAO {
@@ -22,6 +23,13 @@ public interface InstallationDAO {
 	public void installSchemaEnvironmentInformation() throws CollectorPersistenceException;
 	
 	/**
+	 * Set the current version for the application
+	 * @param version
+	 * @throws CollectorPersistenceException
+	 */
+	public void setVersion(String version) throws CollectorPersistenceException;
+	
+	/**
 	 * Install Collection table
 	 * @throws CollectorPersistenceException
 	 */
@@ -32,6 +40,8 @@ public interface InstallationDAO {
 	 * @throws CollectorPersistenceException
 	 */
 	public void installSchemaParameterType() throws CollectorPersistenceException;
+	
+	public void insertParameterType(ParameterType parameterType) throws CollectorPersistenceException;
 	
 	/**
 	 * Install Training parameters table

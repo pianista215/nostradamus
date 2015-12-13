@@ -1,13 +1,21 @@
 package com.devsmobile.nostradamus.collector.persistence.mappers;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 
 public interface SchemasMapper {
 
-	@Insert("CREATE TABLE ENVIROMENT_INFORMATION("
+	@Insert("CREATE TABLE ENVIRONMENT_INFORMATION("
 			+ "version VARCHAR(10)"
 			+ ")")
 	public void createEnvironmentInformation();
+	
+	@Delete("DELETE FROM ENVIRONMENT_INFORMATION")
+	public void deleteEnvironmentInformation();
+	
+	@Insert("INSERT INTO ENVIRONMENT_INFORMATION(version) VALUES (#{version})")
+	public void insertVersion(String version);
 	
 	@Insert("CREATE TABLE COLLECTION("
 			+ "id INT AUTO_INCREMENT PRIMARY KEY,"
@@ -24,7 +32,8 @@ public interface SchemasMapper {
 			+ ")")
 	public void createSchemaParameterType();
 	
-	//public void insertParameterType(Integer id, String name, String description);
+	@Insert("INSERT INTO PARAMETER_TYPE(id,name,description) VALUES (#{id},#{name},#{description})")
+	public void insertParameterType(@Param("id")Integer id, @Param("name")String name, @Param("description")String description);
 	
 	@Insert("CREATE TABLE TRAINING_PARAMETERS("
 			+ "id SMALLINT,"

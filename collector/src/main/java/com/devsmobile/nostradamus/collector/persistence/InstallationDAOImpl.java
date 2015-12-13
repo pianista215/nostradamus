@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.devsmobile.nostradamus.collector.domain.ParameterType;
 import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 import com.devsmobile.nostradamus.collector.persistence.mappers.EnvironmentInfoMapper;
 import com.devsmobile.nostradamus.collector.persistence.mappers.SchemasMapper;
@@ -25,6 +26,18 @@ public class InstallationDAOImpl implements InstallationDAO{
 			return enviromentInfoMapper.getVersion();
 		} catch(Exception e){
 			throw new CollectorPersistenceException("Unable to obtain version", e);
+		}
+		
+	}
+	
+	@Override
+	public void setVersion(String version) throws CollectorPersistenceException {
+		
+		try{
+			schemasMapper.deleteEnvironmentInformation();
+			schemasMapper.insertVersion(version);
+		} catch(Exception e){
+			throw new CollectorPersistenceException("Unable to set version", e);
 		}
 		
 	}
@@ -73,6 +86,19 @@ public class InstallationDAOImpl implements InstallationDAO{
 			schemasMapper.createSchemaTrainingParameters();
 		} catch(Exception e){
 			throw new CollectorPersistenceException("Unable to create Training Parameters table", e);
+		}
+		
+	}
+
+
+	@Override
+	public void insertParameterType(ParameterType parameterType)
+			throws CollectorPersistenceException {
+		
+		try{
+			schemasMapper.insertParameterType(parameterType.getId(), parameterType.getName(), parameterType.getDescription());
+		} catch(Exception e){
+			throw new CollectorPersistenceException("Unable to insert parameterType:"+parameterType.toString(), e);
 		}
 		
 	}
