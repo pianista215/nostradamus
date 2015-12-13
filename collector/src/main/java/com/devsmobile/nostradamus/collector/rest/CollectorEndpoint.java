@@ -20,6 +20,12 @@ public interface CollectorEndpoint {
 	public Response configure(Configuration config);
 	
 	/**
+	 * Install the schemas into the database
+	 * @return
+	 */
+	public Response installSchemas();
+	
+	/**
 	 * Create a new collection 
 	 * @param collection
 	 * @return

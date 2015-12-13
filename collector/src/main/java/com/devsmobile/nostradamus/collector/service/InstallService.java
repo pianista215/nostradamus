@@ -1,5 +1,6 @@
 package com.devsmobile.nostradamus.collector.service;
 
+import com.devsmobile.nostradamus.collector.error.AlreadyInstalledSchemaException;
 import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 
 
@@ -15,6 +16,6 @@ public interface InstallService {
 	 * Install the schemas needed to run the collector
 	 * @throws CollectorPersistenceException
 	 */
-	public void installCollectorSchemas() throws CollectorPersistenceException;
+	public void installCollectorSchemas() throws CollectorPersistenceException, AlreadyInstalledSchemaException;
 	
 }

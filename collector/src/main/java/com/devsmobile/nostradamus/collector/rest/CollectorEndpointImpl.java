@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devsmobile.nostradamus.collector.domain.Configuration;
 import com.devsmobile.nostradamus.collector.domain.Collection;
+import com.devsmobile.nostradamus.collector.error.AlreadyInstalledSchemaException;
 import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 import com.devsmobile.nostradamus.collector.rest.vo.Response;
 import com.devsmobile.nostradamus.collector.rest.vo.ResponseStatus;
@@ -75,6 +76,26 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 			}
 			
 		}
+		return res;
+	}
+	
+	@RequestMapping(value="/installSchemas", method = RequestMethod.POST)
+	@Override
+	public Response installSchemas() {
+		LOG.debug("Trying to install the database schemas");
+		Response res = new Response();
+		try{
+			installService.installCollectorSchemas();
+			res.setStatus(ResponseStatus.OK);
+			res.setMsg("Schemas installed correctly");
+		} catch (AlreadyInstalledSchemaException e){
+			res.setStatus(ResponseStatus.NOOK);
+			res.setMsg(e.getMessage());
+		} catch(CollectorPersistenceException e){
+			res.setStatus(ResponseStatus.NOOK);
+			res.setMsg(e.getMessage());
+		}
+			
 		return res;
 	}
 
