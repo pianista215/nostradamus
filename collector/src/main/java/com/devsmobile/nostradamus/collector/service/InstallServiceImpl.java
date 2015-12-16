@@ -14,14 +14,14 @@ import com.devsmobile.nostradamus.collector.persistence.TestDAO;
 import com.devsmobile.nostradamus.collector.utils.Constants;
 
 @Service
-@MapperScan("com.devsmobile.nostradamus.collector.persistence, com.devsmobile.nostradamus.collector.utils")
+@MapperScan("com.devsmobile.nostradamus.collector.persistence")
 public class InstallServiceImpl implements InstallService{
 
 	@Autowired
 	private TestDAO testDAO;
 	
 	@Autowired
-	private InstallationDAO installDAO;
+	private InstallationDAO installationDAO;
 
 	//TODO: Check how to work@Transactional(readOnly=false, rollbackFor = Exception.class )
 	@Override
@@ -50,7 +50,7 @@ public class InstallServiceImpl implements InstallService{
 		
 		//Check if we already have created the schema, if not install the schema
 		try{
-			String version = installDAO.getVersion();
+			String version = installationDAO.getVersion();
 			if(!version.equals(Constants.VERSION)){
 				//TODO:Upgrade for next versions...
 			} else {
@@ -61,16 +61,16 @@ public class InstallServiceImpl implements InstallService{
 			//No version installed
 		}
 		
-		installDAO.installSchemaEnvironmentInformation();
-		installDAO.setVersion(Constants.VERSION);
+		installationDAO.installSchemaEnvironmentInformation();
+		installationDAO.setVersion(Constants.VERSION);
 		
-		installDAO.installSchemaCollection();
-		installDAO.installSchemaParameterType();
+		installationDAO.installSchemaCollection();
+		installationDAO.installSchemaParameterType();
 		
 		for(ParameterType type: ParameterType.values()){
-			installDAO.insertParameterType(type);
+			installationDAO.insertParameterType(type);
 		}
-		installDAO.installSchemaTrainingParameters();
+		installationDAO.installSchemaTrainingParameters();
 		
 	}
 

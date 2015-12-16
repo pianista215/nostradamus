@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsmobile.nostradamus.collector.domain.Collection;
-import com.devsmobile.nostradamus.collector.error.CollectorException;
 import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
 import com.devsmobile.nostradamus.collector.rest.vo.Response;
 import com.devsmobile.nostradamus.collector.rest.vo.ResponseStatus;
+import com.devsmobile.nostradamus.collector.service.CollectionService;
 import com.devsmobile.nostradamus.collector.service.InstallService;
 import com.devsmobile.nostradamus.collector.utils.PropertiesUtils;
 
@@ -28,6 +28,9 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 	
 	@Autowired
 	private InstallService installService;
+	
+	@Autowired
+	private CollectionService collectionService;	
 	
 
 	@RequestMapping(value="/status", method = RequestMethod.GET)
@@ -55,7 +58,17 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 	@Override
 	public Response createCollection(@RequestBody Collection collection) {
 		LOG.debug("Trying to create collection: {}", collection);
-		return new Response();
+		Response res = new Response();
+		//TODO: Validation
+		try{
+			collectionService.createCollection(collection);
+			res.setStatus(ResponseStatus.OK);
+			res.setMsg("Collection created correctly");
+		} catch(CollectorPersistenceException e){
+			res.setStatus(ResponseStatus.NOOK);
+			res.setMsg("Impossible to create Collection");
+		}
+		return res;
 	}
 
 }
