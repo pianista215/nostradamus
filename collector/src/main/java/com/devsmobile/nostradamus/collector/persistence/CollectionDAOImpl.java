@@ -1,6 +1,8 @@
 package com.devsmobile.nostradamus.collector.persistence;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,8 @@ public class CollectionDAOImpl implements CollectionDAO{
 	
 	@Autowired
 	private TrainingParameterMapper trainingParameterMapper;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(CollectionDAOImpl.class);
 
 	@Override
 	public void createCollection(Collection collection)
@@ -28,6 +32,7 @@ public class CollectionDAOImpl implements CollectionDAO{
 			collectionMapper.insertCollection(collection);
 		
 		} catch(Exception e){
+			LOG.error("Error inserting collection into the database",e);
 			throw new CollectorPersistenceException("Impossible to insert collection into the database",e);
 		}
 		
@@ -41,6 +46,7 @@ public class CollectionDAOImpl implements CollectionDAO{
 			}
 			
 		} catch(Exception e){
+			LOG.error("Error inserting parameter into the database",e);
 			throw new CollectorPersistenceException("Impossible to insert parameter into the database",e);
 		}
 		

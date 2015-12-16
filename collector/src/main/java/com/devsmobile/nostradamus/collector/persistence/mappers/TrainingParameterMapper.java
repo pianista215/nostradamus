@@ -12,7 +12,7 @@ public interface TrainingParameterMapper {
 	 * @param collectionId
 	 * @param parameter
 	 */
-	@Insert("INSERT INTO training_parameters(collection_id, name, description, type_id) "
-			+ "VALUES (#{collectionId}, #{parameter.id}, #{parameter.name}, #{parameter.description}, #{paramater.type.id})")
+	@Insert("INSERT INTO training_parameters(collection_id, id, name, description, type_id) "
+			+ "VALUES (#{collectionId}, #{parameter.id}, #{parameter.name}, #{parameter.description}, #{parameter.type.id})")
 	public void insertParameter(@Param("collectionId")String collectionId, @Param("parameter")TrainingParameter parameter);
 }

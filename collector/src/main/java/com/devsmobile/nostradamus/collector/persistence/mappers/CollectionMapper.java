@@ -1,6 +1,8 @@
 package com.devsmobile.nostradamus.collector.persistence.mappers;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 
 import com.devsmobile.nostradamus.collector.domain.Collection;
 
@@ -11,5 +13,6 @@ public interface CollectionMapper {
 	 * @param collection
 	 */
 	@Insert("INSERT into COLLECTION(name) VALUES (#{collection.name})")
-	public void insertCollection(Collection collection);
+	@Options(useGeneratedKeys = true, keyProperty = "collection.id", keyColumn = "id")
+	public void insertCollection(@Param("collection")Collection collection);
 }

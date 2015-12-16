@@ -2,8 +2,8 @@ package com.devsmobile.nostradamus.collector.service;
 
 import java.util.Random;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import com.devsmobile.nostradamus.collector.domain.ParameterType;
@@ -14,7 +14,7 @@ import com.devsmobile.nostradamus.collector.persistence.TestDAO;
 import com.devsmobile.nostradamus.collector.utils.Constants;
 
 @Service
-@MapperScan("com.devsmobile.nostradamus.collector.persistence")
+@ComponentScan("com.devsmobile.nostradamus.collector.persistence")
 public class InstallServiceImpl implements InstallService{
 
 	@Autowired
