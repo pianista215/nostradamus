@@ -1,5 +1,9 @@
 package com.devsmobile.nostradamus.collector.domain;
 
+import java.text.DateFormat;
+
+import com.devsmobile.nostradamus.collector.error.ObjectNotValidException;
+
 public class TrainingParameter {
 
 	private Integer id;
@@ -34,5 +38,49 @@ public class TrainingParameter {
 	public void setType(ParameterType type) {
 		this.type = type;
 	}
+	
+	/**
+	 * Retrieve the key used for database columns, and to receive objects
+	 * @return
+	 */
+	public String getDatabaseColumn(){
+		return "_"+id;
+	}
+	
+	/**
+	 * Try to parse the object value
+	 * @param p
+	 * @return
+	 * @throws ObjectNotValidException
+	 */
+	public void castObject(Object p) throws ObjectNotValidException{
+		try{
+			if(ParameterType.CHARACTERS.equals(p)){
+				
+				String.valueOf(p);
+				
+			} else if(ParameterType.INTEGER.equals(p)){
+				
+				Integer.parseInt((String) p);
+				
+			} else if(ParameterType.REAL.equals(p)){
+				
+				Double.parseDouble((String) p);
+				
+			} else if(ParameterType.DATE.equals(p)){
+				//TODO
+				
+			}  
+		} catch(Exception e){
+			throw new ObjectNotValidException("Impossible to convert to type:"+type.getName()+", object:"+p);
+		}
+		
+		/*try{
+			type.getClass().cast(p);
+		} catch(ClassCastException e){
+			throw new ObjectNotValidException("Impossible to convert to type:"+type.getName()+", object:"+p);
+		}*/
+	}
+	
 	
 }

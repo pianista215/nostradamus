@@ -7,7 +7,8 @@
 		"e5a0a041-e11a-0142-d44a-7424f9df77c5",
 		"28c00d76-17ea-4640-b614-c7eb5b11fe4e",
 		"5054b1e0-c459-e52d-fd5a-b7b886c36c55",
-		"48ac5eca-0aca-f8e0-3337-501a95438ad3"
+		"48ac5eca-0aca-f8e0-3337-501a95438ad3",
+		"916941af-3b33-73fc-ce91-8836840810e9"
 	],
 	"folders": [],
 	"timestamp": 1449868553600,
@@ -37,22 +38,23 @@
 		},
 		{
 			"id": "48ac5eca-0aca-f8e0-3337-501a95438ad3",
-			"headers": "",
+			"headers": "Content-Type: application/json\n",
 			"url": "{{endpoint}}/createCollection",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
 			"data": [],
-			"dataMode": "params",
+			"dataMode": "raw",
 			"version": 2,
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1450034101780,
+			"time": 1450289524096,
 			"name": "Create collection",
 			"description": "",
 			"collectionId": "c46a66b8-a919-9b00-c885-b1cad7f6409d",
-			"responses": []
+			"responses": [],
+			"rawModeData": "{\n    \"name\": \"Pruebas\",\n    \"parameters\":[\n        {\n            \"name\": \"parameterA\",\n            \"description\": \"descriptionA\",\n            \"type\": \"INTEGER\"\n        },\n        {\n            \"name\": \"parameterB\",\n            \"description\": \"descriptionB\",\n            \"type\": \"REAL\"\n        },\n        {\n            \"name\": \"parameterC\",\n            \"description\": \"descriptionC\",\n            \"type\": \"CHARACTERS\"\n        },\n        {\n            \"name\": \"parameterD\",\n            \"description\": \"descriptionD\",\n            \"type\": \"DATE\"\n        }\n    ]\n\n}"
 		},
 		{
 			"id": "5054b1e0-c459-e52d-fd5a-b7b886c36c55",
@@ -73,6 +75,26 @@
 			"collectionId": "c46a66b8-a919-9b00-c885-b1cad7f6409d",
 			"responses": [],
 			"rawModeData": ""
+		},
+		{
+			"id": "916941af-3b33-73fc-ce91-8836840810e9",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{endpoint}}/addObjects",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1450537731299,
+			"name": "Add Objects",
+			"description": "",
+			"collectionId": "c46a66b8-a919-9b00-c885-b1cad7f6409d",
+			"responses": [],
+			"rawModeData": "{\n    \"collectionId\": \"asdasdasd\",\n    \"objects\":[\n        {\n            \"_0\":1,\n            \"_1\":1.1,\n            \"_2\":\"one\",\n            \"_3\":\"2015/12/01 12:00:00\"\n        },\n        {\n            \"_0\":2,\n            \"_1\":2.2,\n            \"_2\":\"two\",\n            \"_3\":\"2015/12/02 12:00:00\"\n        },\n        {\n            \"_0\":3,\n            \"_1\":3.3,\n            \"_2\":\"three\",\n            \"_3\":\"2015/12/03 12:00:00\"\n        },\n        {\n            \"_0\":4,\n            \"_1\":4.4,\n            \"_2\":\"four\",\n            \"_3\":\"2015/12/04 12:00:00\"\n        },\n    ]\n}"
 		},
 		{
 			"id": "a41b1f06-25ba-1a75-66a7-cd09ac1b8e02",

@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsmobile.nostradamus.collector.domain.Collection;
+import com.devsmobile.nostradamus.collector.error.CollectionNotExistsException;
 import com.devsmobile.nostradamus.collector.error.CollectorPersistenceException;
+import com.devsmobile.nostradamus.collector.error.ObjectNotValidException;
+import com.devsmobile.nostradamus.collector.rest.vo.AddObjectRQ;
 import com.devsmobile.nostradamus.collector.rest.vo.Response;
 import com.devsmobile.nostradamus.collector.rest.vo.ResponseStatus;
 import com.devsmobile.nostradamus.collector.service.CollectionService;
@@ -67,6 +70,21 @@ public class CollectorEndpointImpl implements CollectorEndpoint{
 		} catch(CollectorPersistenceException e){
 			res.setStatus(ResponseStatus.NOOK);
 			res.setMsg("Impossible to create Collection");
+		}
+		return res;
+	}
+	
+	@RequestMapping(value="/addObjects", method = RequestMethod.POST)
+	@Override
+	public Response addObjects(@RequestBody AddObjectRQ addObjectRQ){
+		LOG.debug("AddObjects :{}", addObjectRQ);
+		Response res = new Response();
+		try {
+			collectionService.addObjects(addObjectRQ.getCollectionId(), addObjectRQ.getObjects());
+			res.setStatus(ResponseStatus.OK);
+		} catch (CollectorPersistenceException | CollectionNotExistsException | ObjectNotValidException e) {
+			res.setStatus(ResponseStatus.NOOK);
+			res.setMsg(e.getMessage());
 		}
 		return res;
 	}

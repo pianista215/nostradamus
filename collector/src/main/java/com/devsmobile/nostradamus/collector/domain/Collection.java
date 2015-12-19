@@ -30,17 +30,21 @@ public class Collection {
 		this.parameters = parameters;
 	}
 	
+	public String getTableName(){
+		return Constants.TABLE_PREFIX+id;
+	}
+	
 	/**
 	 * Create the schema to store the data retrieved through the REST service
 	 * @return
 	 */
 	public String generateCreationSQL(){
-		StringBuilder sb = new StringBuilder("CREATE TABLE "+ Constants.TABLE_PREFIX+id).append("(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE ").append(getTableName()).append("(");
 		for(TrainingParameter parameter : parameters){
 			sb.append("_").append(parameter.getId()).append(" ").append(parameter.getType().getMysqlType()).append(",");
 		}
 		//TODO: In the future support primary key or object restrictions
-		//TODO: By default NULL is allowed, but we should allow that to calculate sums, etc?? Think about it
+		//TODO: By default NULL is allowed, but we should allow that to calculate sums, etc?? Think about it. May be allow null, but don't allow to segment using null values
 		sb.setLength(sb.length()-1);
 		sb.append(")");
 		return sb.toString();

@@ -11,7 +11,7 @@ public enum ParameterType {
 	
 	//In the future may be we can have more type of integers and doubles, or allow to set the precission...
 	INTEGER(1, "Integer", "A number without fractional (limit 2147483647). Ex: 1, 30, -5, 8292", Long.class, "INT"),
-	REAL(2, "Real", "A real number, can be fractional (limit 999999999.9999999999) Ex: 1.243, -3.51, 6, 783.23", Double.class, "DECIMAL(10,10)"),
+	REAL(2, "Real", "A real number, can be fractional (limit 999999999.9999999999) Ex: 1.243, -3.51, 6, 783.23", Double.class, "DECIMAL(20,10)"),
 	CHARACTERS(3, "Characters", "A set of characters. (limit 140 characters) Ex: John, Pep, Madrid, jas127aksld", String.class, "VARCHAR(140)"),
 	DATE(4, "Date", "A valid date. Ex: 1988/08/11 15:45:00, 2015/12/12, 2020/10/01, 1970/12/12", Date.class, "DATETIME");
 	
