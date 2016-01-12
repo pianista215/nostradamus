@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CoreApplication {
 	
-	@RequestMapping("/")
+	@RequestMapping("/status")
     public String index() {
         return "Core working";
     }
